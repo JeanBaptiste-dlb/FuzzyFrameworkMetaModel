@@ -1,0 +1,53 @@
+grammar org.xtext.example.mydsl.FuzzyLanguage with org.eclipse.xtext.common.Terminals
+
+generate fuzzyLanguage "http://www.xtext.org/example/mydsl/FuzzyLanguage"
+
+
+FuzzyModel:
+    elements+=FuzzyConfig
+    elements+=FuzzySystemBuilding 
+    ;
+    
+FuzzySystemBuilding:
+	"FuzzySystemBuilding" "{"(affectations+=Affectation)*"}"
+;
+
+Affectation:
+	name=ID '=' value=ID '('(params+=Param)*')'
+	|name=ID '=' value=ANYTHING
+;
+
+
+
+Binding: 
+	op=OPERATOR '=' target=ID  ("(" (params+=Param)* ")")?
+;
+
+Param:
+value = ANYTHING ","
+| value = ANYTHING
+;
+
+terminal ANYTHING:
+	( INT | STRING | DOUBLE | "ASK_USER_FOR_VALUE" | "CONCAVE" | "CONVEXE" | "Up" | "Down")
+;
+
+terminal DOUBLE:
+	INT'.'INT
+;
+
+terminal OPERATOR:
+	"AND"
+	|"NOT"
+	|"OR"
+	|"DEFUZZ"
+	|"THEN"
+	|"AGG"
+;
+TypeSet:
+	"set" "Type" "to" typeName=ID
+;
+
+FuzzyConfig: 
+	"FuzzyConfig" "{" typeSET=TypeSet (BindingsList+=Binding)* "}"
+;
