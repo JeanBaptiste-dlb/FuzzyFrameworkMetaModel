@@ -6,8 +6,27 @@ generate fuzzyLanguage "http://www.xtext.org/example/mydsl/FuzzyLanguage"
 FuzzyModel:
     elements+=FuzzyConfig
     elements+=FuzzySystemBuilding 
+    (elements+=Outputs)*
     ;
-    
+
+Outputs:
+	"Output" "=" out=Output wr=Write
+;
+
+Write:
+	"Write(" value=ID ")"  
+	|"Print(" value=ID ")"
+;
+
+Output:
+	type="FILE" "(" path=ANYTHING ")"
+|	type="CONSOLE"
+|	type="COUT"
+;
+
+
+
+  
 FuzzySystemBuilding:
 	"FuzzySystemBuilding" "{"(affectations+=Affectation)*"}"
 ;
@@ -15,7 +34,15 @@ FuzzySystemBuilding:
 Affectation:
 	name=ID '=' value=ID '('(params+=Param)*')'
 	|name=ID '=' value=ANYTHING
+	|name=ID '=' exp=Expression
 ;
+
+Expression:
+	name=OPERATOR "{" (exps+=Expression)* "}"
+	| name=ID "is" value=Expression 
+	| name=ID
+;
+
 
 
 

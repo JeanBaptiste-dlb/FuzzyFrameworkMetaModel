@@ -21,6 +21,10 @@ import org.xtext.example.mydsl.fuzzyLanguage.Param
 import org.xtext.example.mydsl.fuzzyLanguage.FuzzySystemBuilding
 import org.xtext.example.mydsl.fuzzyLanguage.Affectation
 import org.xtext.example.mydsl.fuzzyLanguage.impl.FuzzySystemBuildingImpl
+import org.xtext.example.mydsl.fuzzyLanguage.Expression
+import java.util.ArrayList
+import org.xtext.example.mydsl.fuzzyLanguage.Outputs
+import org.xtext.example.mydsl.fuzzyLanguage.impl.OutputsImpl
 
 /**
  * Generates code from your model files on save.
@@ -34,6 +38,7 @@ import org.xtext.example.mydsl.fuzzyLanguage.impl.FuzzySystemBuildingImpl
  */
 class FuzzyLanguageGenerator extends AbstractGenerator {
 
+	ArrayList<String> ids=new ArrayList<String>();
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		fsa.generateFile(
 			"FuzzyMain.cpp",resource.compile
@@ -43,6 +48,8 @@ class FuzzyLanguageGenerator extends AbstractGenerator {
 	
 	def CharSequence compile(Resource resource){
 		'''
+			#include <iostream>
+			#include <fstream>
 			#include "ExpressionFactory.h"
 			#include "CogDefuzz.h"
 			#include "FuzzyFactory.h"
@@ -81,7 +88,39 @@ class FuzzyLanguageGenerator extends AbstractGenerator {
 				(obj as FuzzySystemBuildingImpl).compile
 			FuzzyModel:
 				(obj as FuzzyModelImpl).compile
+			Outputs:
+				(obj as OutputsImpl).compile	
 		}	
+	}
+	
+	def CharSequence compile(OutputsImpl out){
+		if(out.out.path === null ){
+			if(ids.contains(out.wr.value)){
+				'''
+				cout << "«out.wr.value» ->" << «out.wr.value»->evaluate()<< endl;'''
+			}
+			else {
+				'''
+				cout << "«out.wr.value» ->"<<&«out.wr.value»->evaluate()<< endl;'''
+			}
+		}
+		else{
+			if(ids.contains(out.wr.value)){
+				'''
+				ofstream file («out.out.path»);
+				file<<"«out.wr.value» ->"<<«out.wr.value»->evaluate();
+				file.close();
+				'''
+			}
+			else {
+				'''
+				ofstream file («out.out.path»);
+				file<<"«out.wr.value» ->"<<«out.wr.value»->evaluate();
+				file.close();
+				'''
+			}
+		}
+			
 	}
 	
 	def CharSequence compile(FuzzyModel fm){
@@ -96,8 +135,9 @@ class FuzzyLanguageGenerator extends AbstractGenerator {
 		'''
 			«FOR EObject obj : contents»
 				«obj.compile»
-			«ENDFOR»		
-			FuzzyFactory<«Type»> f((And<«Type»>*) &opAnd, (Or<«Type»>*)&opOr, (Then<«Type»>*)&opThen, (Agg<«Type»>*)&opAgg, &opDefuzz, (Not<«Type»>*)&opNot);
+			«ENDFOR»
+			SugenoDefuzz<float> opSugenoDefuzz;	
+			FuzzyFactory<«Type»> f((And<«Type»>*) &opAnd, (Or<«Type»>*)&opOr, (Then<«Type»>*)&opThen, (Agg<«Type»>*)&opAgg, &opDefuzz, (Not<«Type»>*)&opNot, &opSugenoDefuzz );
 			
 		'''
 		
@@ -115,8 +155,16 @@ class FuzzyLanguageGenerator extends AbstractGenerator {
 		«FOR affectation : fsb.affectations»«(affectation as Affectation).compile»«ENDFOR»
 		'''
 	}
+	
 	def CharSequence compile(Affectation af){
-		if(af.params.size==0){
+		if(af.exp !==null){
+			ids.add(af.name)
+			return 
+			'''
+			Expression<«Type»>* «af.name» = «af.exp.compile»;
+			'''
+		}
+		if(af.params.size==0 && af.value!="ASK_USER_FOR_VALUE"){
 			return '''ValueModel<«Type»> «af.name»(«af.value»);'''
 		}
 		else{
@@ -137,6 +185,38 @@ class FuzzyLanguageGenerator extends AbstractGenerator {
 					return '''
 					IsRamp<«Type»> «af.name»(«af.params.get(0).value», «af.params.get(1).value», IsRamp<«Type»>::dir::«af.params.get(2).value»);
 					'''
+				case("ASK_USER_FOR_VALUE"):
+					'''
+					«Type» value;
+					cout << "«af.name» : ";
+					cin >> value;
+					ValueModel<«Type»> «af.name»(value);
+
+					'''
+			}
+		}
+	}
+	
+	def CharSequence compile(Expression exp){
+		if(exp.value!==null){
+			if(ids.contains(exp.name)){
+				'''f.newIs(«exp.value.compile», «exp.name» )'''
+			}
+			else{
+			'''f.newIs(«exp.value.compile», &«exp.name» )'''
+			}
+		}
+		else{
+			if(exp.exps.size==0){
+				if(ids.contains(exp.name))
+					'''«exp.name»'''
+				else{
+					'''&«exp.name»'''
+				}
+			}
+			else{
+			'''
+			f.new«exp.name.toLowerCase.toFirstUpper»(«FOR Expression ex: exp.exps»«IF ex==exp.exps.last»«ex.compile»«ELSE»«ex.compile»,«ENDIF»«ENDFOR»)'''
 			}
 		}
 	}
