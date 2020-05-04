@@ -19,7 +19,7 @@ public class CompilerView extends AbstractView {
 	@Override
 	protected void onPaint(Graphics g) {
 		if (!((CompilerDocument) getDocument()).getResultat().equals("")) {
-			File ff=new File(getNameFile()+".fuzz");
+			File ff=new File(getNameFile()+".cpp");
 			try {
 				ff.createNewFile();
 				FileWriter ffw=new FileWriter(ff);
