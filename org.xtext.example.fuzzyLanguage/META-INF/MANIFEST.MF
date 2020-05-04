@@ -27,4 +27,5 @@ Export-Package: org.xtext.example.mydsl.fuzzyLanguage,
  org.xtext.example.mydsl,
  org.xtext.example.mydsl.serializer,
  org.xtext.example.mydsl.parser.antlr
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.eclipse.ui.internal

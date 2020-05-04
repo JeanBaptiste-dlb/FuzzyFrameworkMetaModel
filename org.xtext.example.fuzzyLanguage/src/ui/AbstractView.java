@@ -13,6 +13,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public abstract class AbstractView extends javax.swing.JFrame {
@@ -32,6 +33,8 @@ public abstract class AbstractView extends javax.swing.JFrame {
 	private JTextField textField;
 	private JLabel label;
 	private String nameFile;
+	private JTextArea editor = null;
+
 
 	public AbstractView(AbstractDocument document) {
 		super();
@@ -174,9 +177,12 @@ public abstract class AbstractView extends javax.swing.JFrame {
 			JLabel label = new JLabel("Nom de votre fichier de destination :");
 			jPanel.add(label);
 			this.textField = new JTextField("resultat", 10);
+			this.editor= new JTextArea(30,20);
 			jPanel.add(textField);
 			JButton bouton = new JButton(new GetAction(this, "Envoyer"));
 			jPanel.add(bouton);
+			jPanel.add(editor);
+			jPanel.add(new JButton(new CompileAction(this, "Compiler")));
 		}
 		return jPanel;
 	}
@@ -199,9 +205,12 @@ public abstract class AbstractView extends javax.swing.JFrame {
 	}
 
 	protected abstract void onPaint (Graphics g);
-	
+
 	public JTextField getTextField(){
 		return textField;
+	}
+	public JTextArea getEditor() {
+		return editor;
 	}
  
 	public JLabel getLabel(){

@@ -1,0 +1,56 @@
+FuzzyConfig{
+	set Type to float
+	AND = AndMin 
+	NOT = NotMinus1 
+	OR = OrMax
+	THEN = ThenMin 
+	DEFUZZ = CogDefuzz ( 0 , 25 , 0.1 )
+	AGG = AggMax
+}     
+FuzzySystemBuilding {  
+ 	poor = Gaussian(0, 1.3) 
+ 	good = Gaussian(5, 1.3)
+ 	excellent= Gaussian(10, 1.3)
+ 	delicious = Ramp(6,9,Up)
+ 	trap = Trapeze(0,2,4,6,CONCAVE)
+ 	rancid = Ramp(1,4,Down)  
+ 	cheap = Triangle(0, 5, 10)
+ 	average = Triangle(7.5,12.5,17.5)
+ 	generous= Triangle(15, 20, 25)
+ 	tips = 0
+ 	food = 10
+ 	service=2
+ 	t1 = THEN{
+ 		OR { 
+ 			service is excellent
+ 			food is delicious	  
+ 		}
+ 		tips is generous
+ 	}
+ 	t2 = THEN{
+ 		OR{
+ 			service is poor
+ 			food is rancid
+ 		} 
+ 		tips is cheap
+ 	}
+ 	t3 = THEN{
+ 		service is good
+ 		tips is average
+ 	}
+ 	a1 = AGG{
+ 		t1
+ 		t2
+ 	}
+ 	r= AGG{
+ 		a1
+ 		t1
+ 	}
+ 	system = DEFUZZ{ 
+ 		r 
+ 	 	tips 
+ 	 } 
+}
+
+Output= CONSOLE
+Write(system) 

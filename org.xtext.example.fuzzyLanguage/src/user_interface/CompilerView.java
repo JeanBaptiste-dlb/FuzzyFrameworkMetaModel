@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import javax.swing.JTextArea;
+
 import ui.AbstractDocument;
 import ui.AbstractView;
 
@@ -57,7 +59,8 @@ public class CompilerView extends AbstractView {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-			}		
+			}
+			
 		}
 	}
 }
