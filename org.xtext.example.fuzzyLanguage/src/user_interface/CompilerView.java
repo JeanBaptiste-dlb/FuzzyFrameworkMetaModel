@@ -46,7 +46,7 @@ public class CompilerView extends AbstractView {
 					if (exitVal == 0) {
 						System.out.println("Success!");
 						System.out.println(output);
-						System.exit(0);
+						g.drawString(output.toString(), 130, 100);
 					} else {
 						//abnormal...
 					}
@@ -58,7 +58,6 @@ public class CompilerView extends AbstractView {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}		
-			g.drawString("Votre fichier a été généré", 130, 100);
 		}
 	}
 }

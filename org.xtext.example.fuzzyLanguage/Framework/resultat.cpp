@@ -38,7 +38,7 @@ int main(){
 	IsTriangle<float> cheap(0, 5, 10);
 	IsTriangle<float> average(7.5, 12.5, 17.5);
 	IsTriangle<float> generous(15, 20, 25);
-	ValueModel<float> tips(0);ValueModel<float> food(10);ValueModel<float> service(8);Expression<float>* t1 = f.newThen(f.newOr(f.newIs(&excellent, &service ),f.newIs(&delicious, &food )),f.newIs(&generous, &tips ));
+	ValueModel<float> tips(0);ValueModel<float> food(10);ValueModel<float> service(2);Expression<float>* t1 = f.newThen(f.newOr(f.newIs(&excellent, &service ),f.newIs(&delicious, &food )),f.newIs(&generous, &tips ));
 	Expression<float>* t2 = f.newThen(f.newOr(f.newIs(&poor, &service ),f.newIs(&rancid, &food )),f.newIs(&cheap, &tips ));
 	Expression<float>* t3 = f.newThen(f.newIs(&good, &service ),f.newIs(&average, &tips ));
 	Expression<float>* a1 = f.newAgg(t1,t2);
