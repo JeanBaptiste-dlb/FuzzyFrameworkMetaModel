@@ -171,7 +171,7 @@ public abstract class AbstractView extends javax.swing.JFrame {
 			};
 			jPanel.setLayout(new FlowLayout());
 			jPanel.setPreferredSize(new Dimension(600, 400));
-			JLabel label = new JLabel("Nom de votre dossier de destination :");
+			JLabel label = new JLabel("Nom de votre fichier de destination :");
 			jPanel.add(label);
 			this.textField = new JTextField("resultat", 10);
 			jPanel.add(textField);
