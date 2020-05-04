@@ -19,7 +19,7 @@ FuzzySystemBuilding {
  	generous= Triangle(15, 20, 25)
  	tips = 0
  	food = 10
- 	service=ASK_USER_FOR_VALUE  
+ 	service=8
  	t1 = THEN{
  		OR { 
  			service is excellent
@@ -52,5 +52,5 @@ FuzzySystemBuilding {
  	 } 
 }
 
-Output= FILE ( "./salutlesamis.txt" )
+Output= CONSOLE
 Write(system) 

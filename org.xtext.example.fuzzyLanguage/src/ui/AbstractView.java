@@ -36,7 +36,7 @@ public abstract class AbstractView extends javax.swing.JFrame {
 	public AbstractView(AbstractDocument document) {
 		super();
 		this.document = document;
-		this.nameFile="resultat.cpp";
+		this.nameFile="resultat";
 		initialize();
 		getDocument().onNewDocument();
 	}
