@@ -36,7 +36,7 @@ namespace Fuzzy {
 			num += val * fi[count];
 			count++;
 		}
-		e.PrintShape(cout, s);
+		//e.PrintShape(cout, s);
 		return num / den;
 
 	}
