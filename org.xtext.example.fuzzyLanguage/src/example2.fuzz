@@ -1,0 +1,79 @@
+
+FuzzyConfig{
+	set Type to float
+	NOT = NotMinus1
+    AND = AndMin
+    OR = OrMax
+    THEN = ThenMin
+    DEFUZZ = CogDefuzz(0, 20, 0.1)
+    AGG = AggMax
+}
+
+FuzzySystemBuilding{
+	group = 4
+		small_size = Triangle (0, 1.5, 3)
+		medium_size = Triangle (3, 4, 5)
+		big_size = Triangle (5, 6.5, 8)
+	
+	quality = 17
+		unsatisfying = Ramp (3, 10, Down)
+		good = Trapeze (5, 8, 12, 15, CONCAVE)
+		excellent = Ramp (10, 17, Up)
+	
+	generosity = 20
+		average = Gaussian (10, 0.35)
+		generous = Gaussian (20, 0.25)
+	
+	mark = 20
+		low = Triangle (0, 5, 10)
+		medium = Triangle (5, 10, 15)
+		high = Triangle (10, 15, 20)
+	
+	t1 = THEN {
+		OR {
+			group is big_size
+			quality is unsatisfying
+		}
+		mark is low
+	}
+
+	t2 = THEN {
+	 	OR {
+			group is small_size
+			OR {
+				quality is good
+				generosity is average
+			}
+		}
+		mark is medium
+	}
+	
+	t3 = THEN {
+		OR {
+			group is medium_size
+			OR {
+				quality is excellent
+				generosity is generous
+			}
+		}
+		mark is high
+	}
+
+	a1 = AGG {
+		t1
+		t2
+	}
+	
+	r = AGG {
+		a1
+		t3
+	} 
+
+	system = DEFUZZ {
+		r
+		mark
+	}
+}
+
+Output = CONSOLE
+Print(system)

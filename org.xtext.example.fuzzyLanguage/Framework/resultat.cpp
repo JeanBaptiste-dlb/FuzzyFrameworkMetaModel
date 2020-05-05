@@ -20,30 +20,32 @@ using namespace Fuzzy;
 using namespace std;
 
 int main(){
-	AndMin<float> opAnd;
 	NotMinus1<float> opNot;
+	AndMin<float> opAnd;
 	OrMax<float> opOr;
 	ThenMin<float> opThen;
-	CogDefuzz<float> opDefuzz (0,25,0.1);
+	CogDefuzz<float> opDefuzz (0,20,0.1);
 	AggMax<float> opAgg;
 	SugenoDefuzz<float> opSugenoDefuzz;	
 	FuzzyFactory<float> f((And<float>*) &opAnd, (Or<float>*)&opOr, (Then<float>*)&opThen, (Agg<float>*)&opAgg, &opDefuzz, (Not<float>*)&opNot, &opSugenoDefuzz );
 	
-	IsGaussian<float> poor(0,1.3);
-	IsGaussian<float> good(5,1.3);
-	IsGaussian<float> excellent(10,1.3);
-	IsRamp<float> delicious(6, 9, IsRamp<float>::dir::Up);
-	IsTrapeze<float> trap(0, 2, 4, 6, concavite::CONCAVE);
-	IsRamp<float> rancid(1, 4, IsRamp<float>::dir::Down);
-	IsTriangle<float> cheap(0, 5, 10);
-	IsTriangle<float> average(7.5, 12.5, 17.5);
-	IsTriangle<float> generous(15, 20, 25);
-	ValueModel<float> tips(0);ValueModel<float> food(10);ValueModel<float> service(2);Expression<float>* t1 = f.newThen(f.newOr(f.newIs(&excellent, &service ),f.newIs(&delicious, &food )),f.newIs(&generous, &tips ));
-	Expression<float>* t2 = f.newThen(f.newOr(f.newIs(&poor, &service ),f.newIs(&rancid, &food )),f.newIs(&cheap, &tips ));
-	Expression<float>* t3 = f.newThen(f.newIs(&good, &service ),f.newIs(&average, &tips ));
+	ValueModel<float> group(4);IsTriangle<float> small_size(0, 1.5, 3);
+	IsTriangle<float> medium_size(3, 4, 5);
+	IsTriangle<float> big_size(5, 6.5, 8);
+	ValueModel<float> quality(17);IsRamp<float> unsatisfying(3, 10, IsRamp<float>::dir::Down);
+	IsTrapeze<float> good(5, 8, 12, 15, concavite::CONCAVE);
+	IsRamp<float> excellent(10, 17, IsRamp<float>::dir::Up);
+	ValueModel<float> generosity(20);IsGaussian<float> average(10,0.35);
+	IsGaussian<float> generous(20,0.25);
+	ValueModel<float> mark(20);IsTriangle<float> low(0, 5, 10);
+	IsTriangle<float> medium(5, 10, 15);
+	IsTriangle<float> high(10, 15, 20);
+	Expression<float>* t1 = f.newThen(f.newOr(f.newIs(&big_size, &group ),f.newIs(&unsatisfying, &quality )),f.newIs(&low, &mark ));
+	Expression<float>* t2 = f.newThen(f.newOr(f.newIs(&small_size, &group ),f.newOr(f.newIs(&good, &quality ),f.newIs(&average, &generosity ))),f.newIs(&medium, &mark ));
+	Expression<float>* t3 = f.newThen(f.newOr(f.newIs(&medium_size, &group ),f.newOr(f.newIs(&excellent, &quality ),f.newIs(&generous, &generosity ))),f.newIs(&high, &mark ));
 	Expression<float>* a1 = f.newAgg(t1,t2);
-	Expression<float>* r = f.newAgg(a1,t1);
-	Expression<float>* system = f.newDefuzz(r,&tips);
+	Expression<float>* r = f.newAgg(a1,t3);
+	Expression<float>* system = f.newDefuzz(r,&mark);
 	cout << "system ->" << system->evaluate()<< endl;
 	return 0;
 }
