@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -43,6 +44,17 @@ public class CompilerDocument extends AbstractDocument {
 			FuzzyModel model = (FuzzyModel) resource.getContents().get(0);
 			FuzzyLanguageGenerator flg = new FuzzyLanguageGenerator();
 			resultat+= flg.compile(resource);
+			
+			File ff=new File("resultat.cpp");
+			try {
+				ff.createNewFile();
+				FileWriter ffw=new FileWriter(ff);
+				ffw.write(resultat);
+				ffw.write("\n");
+				ffw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
 			super.getView().setDl(true);
 			super.getView().repaint();
