@@ -30,7 +30,6 @@ public abstract class AbstractView extends javax.swing.JFrame {
 	private JMenuItem jMenuItem9 = null;
 	private JPanel jPanel = null;
 	private javax.swing.JFileChooser jFileChooser = null;  //  @jve:decl-index=0:visual-constraint="11,367"
-	private JTextField textField;
 	private JLabel label;
 	private String nameFile;
 	private JTextArea editor = null;
@@ -54,7 +53,7 @@ public abstract class AbstractView extends javax.swing.JFrame {
 		this.setContentPane(getJPanel());
 		this.setJMenuBar(getJJMenuBar());
 		this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		this.setBounds(45, 25, 400, 200);
+		this.setBounds(45, 25, 300, 700);
 		this.setTitle("Fuzzy Compiler");
 	}
 	
@@ -174,15 +173,11 @@ public abstract class AbstractView extends javax.swing.JFrame {
 			};
 			jPanel.setLayout(new FlowLayout());
 			jPanel.setPreferredSize(new Dimension(600, 400));
-			JLabel label = new JLabel("Nom de votre fichier de destination :");
-			jPanel.add(label);
-			this.textField = new JTextField("resultat", 10);
 			this.editor= new JTextArea(30,20);
-			jPanel.add(textField);
-			JButton bouton = new JButton(new GetAction(this, "Envoyer"));
-			jPanel.add(bouton);
 			jPanel.add(editor);
 			jPanel.add(new JButton(new CompileAction(this, "Compiler")));
+			JButton bouton = new JButton(new GetAction(this, "Calculer"));
+			jPanel.add(bouton);
 		}
 		return jPanel;
 	}
@@ -206,9 +201,6 @@ public abstract class AbstractView extends javax.swing.JFrame {
 
 	protected abstract void onPaint (Graphics g);
 
-	public JTextField getTextField(){
-		return textField;
-	}
 	public JTextArea getEditor() {
 		return editor;
 	}
