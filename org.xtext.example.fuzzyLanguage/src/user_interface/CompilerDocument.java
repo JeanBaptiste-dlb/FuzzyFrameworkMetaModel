@@ -44,34 +44,8 @@ public class CompilerDocument extends AbstractDocument {
 			FuzzyLanguageGenerator flg = new FuzzyLanguageGenerator();
 			resultat+= flg.compile(resource);
 			
-			ProcessBuilder processBuilder = new ProcessBuilder();
-			processBuilder.command("bash", "-c", "./script.sh");
-			try {
-				Process process = processBuilder.start();
-				StringBuilder output = new StringBuilder();
-				
-				BufferedReader reader = new BufferedReader(
-				new InputStreamReader(process.getInputStream()));
-				
-				String line;
-				while ((line = reader.readLine()) != null) {
-					output.append(line + "\n");
-				}
-
-				int exitVal = process.waitFor();
-				if (exitVal == 0) {
-					System.out.println("Success!");
-					System.out.println(output);
-					((CompilerView)super.getView()).setResultat(output.toString());
-					super.getView().repaint();
-				} else {
-					//abnormal...
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
+			super.getView().setDl(true);
+			super.getView().repaint();
 		}
 		super.onOpenDocument();
 	}

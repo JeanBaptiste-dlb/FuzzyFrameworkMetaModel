@@ -25,21 +25,14 @@ public class CompilerView extends AbstractView {
 
 	@Override
 	protected void onPaint(Graphics g) {
-		if (!((CompilerDocument) getDocument()).getResultat().equals("")) {
-			File ff=new File(getNameFile()+".cpp");
-			try {
-				ff.createNewFile();
-				FileWriter ffw=new FileWriter(ff);
-				ffw.write(((CompilerDocument) getDocument()).getResultat());
-				ffw.write("\n");
-				ffw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}
 		if(!resultat.equals("")) {
 			g.drawString(resultat, 80, 600);
+		}
+		if(super.getDl()) {
+			g.drawString("Votre fichier a été chargé correctement !", 40, 550);
+		}
+		if(super.getCompile()) {
+			g.drawString("Votre fichier a été compilé correctement !", 40, 550);
 		}
 	}
 	
