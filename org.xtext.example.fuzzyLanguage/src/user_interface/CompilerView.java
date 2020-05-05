@@ -14,8 +14,11 @@ import ui.AbstractView;
 
 public class CompilerView extends AbstractView {
 	
+	private String resultat;
+	
 	public CompilerView(AbstractDocument document) {
 		super(document);
+		this.resultat="";
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -30,37 +33,17 @@ public class CompilerView extends AbstractView {
 				ffw.write(((CompilerDocument) getDocument()).getResultat());
 				ffw.write("\n");
 				ffw.close();
-				ProcessBuilder processBuilder = new ProcessBuilder();
-				processBuilder.command("bash", "-c", "./script.sh");
-				try {
-					Process process = processBuilder.start();
-					StringBuilder output = new StringBuilder();
-					
-					BufferedReader reader = new BufferedReader(
-					new InputStreamReader(process.getInputStream()));
-					
-					String line;
-					while ((line = reader.readLine()) != null) {
-						output.append(line + "\n");
-					}
-	
-					int exitVal = process.waitFor();
-					if (exitVal == 0) {
-						System.out.println("Success!");
-						System.out.println(output);
-						g.drawString(output.toString(), 130, 100);
-					} else {
-						//abnormal...
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			
 		}
+		if(!resultat.equals("")) {
+			g.drawString(resultat, 80, 600);
+		}
+	}
+	
+	public void setResultat(String s) {
+		this.resultat = s;
 	}
 }
