@@ -33,6 +33,8 @@ public abstract class AbstractView extends javax.swing.JFrame {
 	private JLabel label;
 	private String nameFile;
 	private JTextArea editor = null;
+	private boolean isDl;
+	private boolean isCompile;
 
 
 	public AbstractView(AbstractDocument document) {
@@ -41,6 +43,24 @@ public abstract class AbstractView extends javax.swing.JFrame {
 		this.nameFile="resultat";
 		initialize();
 		getDocument().onNewDocument();
+		this.isDl = false;
+		this.isCompile = false;
+	}
+	
+	public boolean getDl() {
+		return this.isDl;
+	}
+	
+	public void setDl(boolean b) {
+		this.isDl=b;
+	}
+	
+	public boolean getCompile() {
+		return this.isCompile;
+	}
+	
+	public void setCompile(boolean b) {
+		this.isCompile=b;
 	}
 
 	/**

@@ -2,15 +2,15 @@ package ui;
 
 import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.swing.AbstractAction;
-import javax.swing.JTextField;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.ui.internal.Model;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
 import org.xtext.example.mydsl.FuzzyLanguageStandaloneSetup;
@@ -46,6 +46,18 @@ public class CompileAction extends AbstractAction {
 		FuzzyModel model = (FuzzyModel) resource.getContents().get(0);
 		FuzzyLanguageGenerator flg = new FuzzyLanguageGenerator();
 		resultat+= flg.compile(resource);
+		File output= new File("./resultat.cpp");
+		try {
+			FileWriter writer=new FileWriter(output);
+			writer.write(resultat);
+			resultat="";
+			writer.close();
+			this.fenetre.setCompile(true);
+			this.fenetre.repaint();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	public String getResultat() {
 		return this.resultat;
