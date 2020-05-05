@@ -119,7 +119,7 @@ public class FuzzyLanguageValidator extends AbstractFuzzyLanguageValidator {
         boolean _tripleNotEquals_5 = (_get != a);
         if (_tripleNotEquals_5) {
           String _name = a.getName();
-          String _plus = ("Be carefull, \"" + _name);
+          String _plus = ("Be careful, \"" + _name);
           String _plus_1 = (_plus + "\" has already been defined");
           this.warning(_plus_1, FuzzyLanguagePackage.Literals.AFFECTATION__NAME);
         }

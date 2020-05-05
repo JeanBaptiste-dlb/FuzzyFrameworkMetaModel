@@ -66,7 +66,7 @@ class FuzzyLanguageValidator extends AbstractFuzzyLanguageValidator {
 		for (var i = 0; i < a.eContainer.eAllContents.filter(Affectation).toList.size(); i++) {
 			if (a.eContainer.eAllContents.filter(Affectation).toList.get(i).name.equals(a.name)) {
 				if (a.eContainer.eAllContents.filter(Affectation).toList.get(i) !== a) {
-					warning("Be carefull, \"" + a.name + "\" has already been defined", Literals.AFFECTATION__NAME);
+					warning("Be careful, \"" + a.name + "\" has already been defined", Literals.AFFECTATION__NAME);
 				}
 			}
 		}
